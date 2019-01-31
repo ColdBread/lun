@@ -1,3 +1,13 @@
+ccreate table balance
+(
+  id     int auto_increment
+    primary key,
+  date   date    not null,
+  income decimal not null,
+  costs  decimal not null,
+  net    decimal not null
+);
+
 create table client
 (
   id          int auto_increment
@@ -10,10 +20,13 @@ create table client
 
 create table money_flow
 (
-  id   int auto_increment
+  id         int auto_increment
     primary key,
-  date date    not null,
-  sum  decimal not null
+  date       date    not null,
+  sum        decimal not null,
+  balance_id int     not null,
+  constraint money_flow_balance_id_fk
+  foreign key (balance_id) references balance (id)
 );
 
 create table owner
