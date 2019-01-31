@@ -1,4 +1,4 @@
-ccreate table balance
+create table balance
 (
   id     int auto_increment
     primary key,
@@ -36,7 +36,7 @@ create table owner
   phone varchar(20) not null
 );
 
-create table justice
+create table juridical
 (
   id            int          not null
     primary key,
@@ -188,5 +188,4 @@ create table worker_bonus
   constraint worker_bonus_money_flow_id_fk
   foreign key (id) references money_flow (id)
 );
-
 
