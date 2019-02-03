@@ -1,0 +1,15 @@
+insert into physical (id, surname) values (1, 'Cranstone');
+insert into physical (id, surname) values (2, 'Kenrack');
+insert into physical (id, surname) values (3, 'Canfer');
+insert into physical (id, surname) values (4, 'Giddy');
+insert into physical (id, surname) values (5, 'Neil');
+insert into physical (id, surname) values (6, 'Nolin');
+insert into physical (id, surname) values (7, 'Furmenger');
+insert into physical (id, surname) values (8, 'Luce');
+insert into physical (id, surname) values (9, 'Blaby');
+insert into physical (id, surname) values (10, 'Ferguson');
+insert into physical (id, surname) values (11, 'Ashard');
+insert into physical (id, surname) values (12, 'Debell');
+insert into physical (id, surname) values (13, 'Gossage');
+insert into physical (id, surname) values (14, 'Whye');
+insert into physical (id, surname) values (15, 'Blindmann');
