@@ -1,231 +1,154 @@
-create table balance
+CREATE TABLE balance
 (
-  id int
-  auto_increment
-    primary key,
-  date   date    not null,
-  income int not null,
-  costs  int not null,
-  net    int not null
+  id     INT auto_increment PRIMARY KEY,
+  date   DATE NOT NULL,
+  income INT  NOT NULL,
+  costs  INT  NOT NULL,
+  net    INT  NOT NULL
 );
 
-  create table client
-  (
-    id int
-    auto_increment
-    primary key,
-  surname     varchar
-    (40) not null,
-  phone       varchar
-    (20) not null,
-  type        varchar
-    (30) not null,
-  max_payment int     not null
+CREATE TABLE client
+(
+  id          INT auto_increment PRIMARY KEY,
+  surname     VARCHAR(40) NOT NULL,
+  phone       VARCHAR(20) NOT NULL,
+  type        VARCHAR(30) NOT NULL,
+  max_payment INT         NOT NULL
 );
 
-    create table money_flow
-    (
-      id int
-      auto_increment
-    primary key,
-  date       date    not null,
-  sum        int not null,
-  balance_id int     not null,
-  constraint money_flow_balance_id_fk
-  foreign key
-      (balance_id) references balance
-      (id)
+CREATE TABLE money_flow
+(
+  id         INT auto_increment PRIMARY KEY,
+  date       DATE NOT NULL,
+  sum        INT  NOT NULL,
+  balance_id INT  NOT NULL,
+  CONSTRAINT money_flow_balance_id_fk FOREIGN KEY (balance_id) REFERENCES balance (id)
 );
 
-      create table owner
-      (
-        id int
-        auto_increment
-    primary key,
-  phone varchar
-        (20) not null
+CREATE TABLE owner
+(
+  id    INT auto_increment PRIMARY KEY,
+  phone VARCHAR(20) NOT NULL
 );
 
-        create table juridical
-        (
-          id int not null
-            primary key,
-          name varchar(100) not null,
-          business_type varchar(30) not null,
-          contact_name varchar(100) not null,
-          constraint justice_owner_id_fk
-  foreign key (id) references owner (id)
-        );
-
-        create table physical
-        (
-          surname varchar(50) not null,
-          id int not null
-            primary key,
-          constraint Physical_owner_id_fk
-  foreign key (id) references owner (id)
-        );
-
-        create table worker
-        (
-          id int
-          auto_increment
-    primary key,
-  surname  varchar
-          (40) not null,
-  phone    varchar
-          (20) not null,
-  position varchar
-          (40) not null,
-  salary   int     not null
+CREATE TABLE juridical
+(
+  id            INT          NOT NULL PRIMARY KEY,
+  name          VARCHAR(100) NOT NULL,
+  business_type VARCHAR(30)  NOT NULL,
+  contact_name  VARCHAR(100) NOT NULL,
+  CONSTRAINT justice_owner_id_fk FOREIGN KEY (id) REFERENCES owner (id)
 );
 
-          create table building
-          (
-            id int
-            auto_increment
-    primary key,
-  worker_id int          null,
-  owner_id  int          not null,
-  address   varchar
-            (100) not null,
-  type      varchar
-            (30)  not null,
-  room_num  int          not null,
-  payment   int      not null,
-  constraint building_owner_id_fk
-  foreign key
-            (owner_id) references owner
-            (id),
-  constraint building_worker_id_fk
-  foreign key
-            (worker_id) references worker
-            (id)
+CREATE TABLE physical
+(
+  surname VARCHAR(50) NOT NULL,
+  id      INT         NOT NULL PRIMARY KEY,
+  CONSTRAINT physical_owner_id_fk FOREIGN KEY (id) REFERENCES owner (id)
 );
 
-            create table client_building
-            (
-              client_id int not null,
-              building_id int not null,
-              primary key (building_id, client_id),
-              constraint client_building_building_id_fk
-  foreign key (building_id) references building (id),
-              constraint client_building_client_id_fk
-  foreign key (client_id) references client (id)
-            );
-
-            create table contract
-            (
-              id int
-              auto_increment
-    primary key,
-  building_id     int     not null,
-  worker_id       int     not null,
-  client_id       int     not null,
-  monthly_payment int not null,
-  rent_start      date    not null,
-  rent_end        date    not null,
-  constraint contract_building_id_fk
-  foreign key
-              (building_id) references building
-              (id),
-  constraint contract_client_id_fk
-  foreign key
-              (client_id) references client
-              (id),
-  constraint contract_worker_id_fk
-  foreign key
-              (worker_id) references worker
-              (id)
+CREATE TABLE worker
+(
+  id       INT auto_increment PRIMARY KEY,
+  surname  VARCHAR(40) NOT NULL,
+  phone    VARCHAR(20) NOT NULL,
+  position VARCHAR(40) NOT NULL,
+  salary   INT         NOT NULL
 );
 
-              create table inspection
-              (
-                id int
-                auto_increment
-    primary key,
-  worker_id   int          not null,
-  building_id int          not null,
-  date        date         not null,
-  comment     varchar
-                (255) null,
-  constraint inspection_building_id_fk
-  foreign key
-                (building_id) references building
-                (id),
-  constraint inspection_worker_id_fk
-  foreign key
-                (worker_id) references worker
-                (id)
+CREATE TABLE building
+(
+  id        INT auto_increment PRIMARY KEY,
+  worker_id INT          NULL,
+  owner_id  INT          NOT NULL,
+  address   VARCHAR(100) NOT NULL,
+  type      VARCHAR(30)  NOT NULL,
+  room_num  INT          NOT NULL,
+  payment   INT          NOT NULL,
+  CONSTRAINT building_owner_id_fk FOREIGN KEY (owner_id) REFERENCES owner (id),
+  CONSTRAINT building_worker_id_fk FOREIGN KEY (worker_id) REFERENCES worker (id)
 );
 
-                create table rent_costs
-                (
-                  id int not null
-                    primary key,
-                  building_id int not null,
-                  year int not null,
-                  month int not null,
-                  constraint rent_costs_building_id_fk
-  foreign key (building_id) references building (id),
-                  constraint rent_costs_money_flow_id_fk
-  foreign key (id) references money_flow (id)
-                );
-
-                create table rent_income
-                (
-                  id int not null
-                    primary key,
-                  contract_id int not null,
-                  year int not null,
-                  month int not null,
-                  constraint rent_income_contract_id_fk
-  foreign key (contract_id) references contract (id),
-                  constraint rent_income_money_flow_id_fk
-  foreign key (id) references money_flow (id)
-                );
-
-                create table review
-                (
-                  id int
-                  auto_increment
-    primary key,
-  client_id   int          not null,
-  building_id int          not null,
-  date        date         not null,
-  comment     varchar
-                  (255) null,
-  constraint review_building_id_fk
-  foreign key
-                  (building_id) references building
-                  (id),
-  constraint review_client_id_fk
-  foreign key
-                  (client_id) references client
-                  (id)
+CREATE TABLE client_building
+(
+  client_id   INT NOT NULL,
+  building_id INT NOT NULL,
+  PRIMARY KEY (building_id, client_id),
+  CONSTRAINT client_building_building_id_fk FOREIGN KEY (building_id)
+  REFERENCES building (id),
+  CONSTRAINT client_building_client_id_fk FOREIGN KEY (client_id) REFERENCES client (id)
 );
 
-                  create table wage
-                  (
-                    id int not null
-                      primary key,
-                    worker_id int not null,
-                    year int not null,
-                    month int not null,
-                    constraint wage_money_flow_id_fk
-  foreign key (id) references money_flow (id),
-                    constraint wage_worker_id_fk
-  foreign key (worker_id) references worker (id)
-                  );
+CREATE TABLE contract
+(
+  id              INT auto_increment PRIMARY KEY,
+  building_id     INT  NOT NULL,
+  worker_id       INT  NOT NULL,
+  client_id       INT  NOT NULL,
+  monthly_payment INT  NOT NULL,
+  rent_start      DATE NOT NULL,
+  rent_end        DATE NOT NULL,
+  CONSTRAINT contract_building_id_fk FOREIGN KEY (building_id) REFERENCES building (id),
+  CONSTRAINT contract_client_id_fk FOREIGN KEY (client_id) REFERENCES client (id),
+  CONSTRAINT contract_worker_id_fk FOREIGN KEY (worker_id) REFERENCES worker (id)
+);
 
-                  create table worker_bonus
-                  (
-                    id int not null
-                      primary key,
-                    contract_id int not null,
-                    constraint worker_bonus_contract_id_fk
-  foreign key (contract_id) references contract (id),
-                    constraint worker_bonus_money_flow_id_fk
-  foreign key (id) references money_flow (id)
-                  );
+CREATE TABLE inspection
+(
+  id          INT auto_increment PRIMARY KEY,
+  worker_id   INT          NOT NULL,
+  building_id INT          NOT NULL,
+  date        DATE         NOT NULL,
+  comment     VARCHAR(255) NULL,
+  CONSTRAINT inspection_building_id_fk FOREIGN KEY (building_id) REFERENCES building (id),
+  CONSTRAINT inspection_worker_id_fk FOREIGN KEY (worker_id) REFERENCES worker (id)
+);
 
+CREATE TABLE rent_costs
+(
+  id          INT NOT NULL PRIMARY KEY,
+  building_id INT NOT NULL,
+  year        INT NOT NULL,
+  month       INT NOT NULL,
+  CONSTRAINT rent_costs_building_id_fk FOREIGN KEY (building_id) REFERENCES building (id),
+  CONSTRAINT rent_costs_money_flow_id_fk FOREIGN KEY (id) REFERENCES money_flow (id)
+);
+
+CREATE TABLE rent_income
+(
+  id          INT NOT NULL PRIMARY KEY,
+  contract_id INT NOT NULL,
+  year        INT NOT NULL,
+  month       INT NOT NULL,
+  CONSTRAINT rent_income_contract_id_fk FOREIGN KEY (contract_id) REFERENCES contract (id),
+  CONSTRAINT rent_income_money_flow_id_fk FOREIGN KEY (id) REFERENCES money_flow (id)
+);
+
+CREATE TABLE review
+(
+  id          INT auto_increment PRIMARY KEY,
+  client_id   INT          NOT NULL,
+  building_id INT          NOT NULL,
+  date        DATE         NOT NULL,
+  comment     VARCHAR(255) NULL,
+  CONSTRAINT review_building_id_fk FOREIGN KEY (building_id) REFERENCES building (id),
+  CONSTRAINT review_client_id_fk FOREIGN KEY (client_id) REFERENCES client (id)
+);
+
+CREATE TABLE wage
+(
+  id        INT NOT NULL PRIMARY KEY,
+  worker_id INT NOT NULL,
+  year      INT NOT NULL,
+  month     INT NOT NULL,
+  CONSTRAINT wage_money_flow_id_fk FOREIGN KEY (id) REFERENCES money_flow (id),
+  CONSTRAINT wage_worker_id_fk FOREIGN KEY (worker_id) REFERENCES worker (id)
+);
+
+CREATE TABLE worker_bonus
+(
+  id          INT NOT NULL PRIMARY KEY,
+  contract_id INT NOT NULL,
+  CONSTRAINT worker_bonus_contract_id_fk FOREIGN KEY (contract_id) REFERENCES contract (id),
+  CONSTRAINT worker_bonus_money_flow_id_fk FOREIGN KEY (id) REFERENCES money_flow (id)
+);
